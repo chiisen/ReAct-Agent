@@ -14,6 +14,41 @@ ReAct 的核心在於將執行的過程拆解為三個不斷循環的步驟：
 
 ---
 
+## 🧩 技術選型：OpenAI SDK 介紹
+
+本專案採用 `openai` 官方 Python SDK 來與 **MiniMax 國際版** 進行通訊。
+
+### 為什麼選擇 OpenAI SDK？
+雖然我們使用的是 MiniMax 的模型，但 MiniMax 提供了「OpenAI 兼容接口」。使用 SDK 的優點包括：
+- **跨平台兼容**：未來若想切換到 GPT-4 或 Claude (經由 LiteLLM 等代理)，只需更改 `base_url` 與 `api_key`。
+- **簡化開發**：自動處理 JSON 封裝與 HTTP Header，並提供完善的型別提示。
+- **穩定性**：內建錯誤處理與連線管理。
+
+### 基本用法說明
+
+在 `main.py` 中，我們透過以下方式初始化並調用：
+
+```python
+from openai import OpenAI
+
+# 1. 初始化客戶端：設定端點與金鑰
+client = OpenAI(
+    api_key="您的金鑰",
+    base_url="https://api.minimax.io/v1" # MiniMax 兼容端點
+)
+
+# 2. 進行對話調用
+response = client.chat.completions.create(
+    model="Minimax-M2.5",
+    messages=[{"role": "user", "content": "你好！"}]
+)
+
+# 3. 獲取內容
+print(response.choices[0].message.content)
+```
+
+---
+
 ## 📊 系統流程圖
 
 > 📦 **預覽須知**：本圖使用 Mermaid 語法繪製。若在 VS Code 中看不到圖示，
@@ -92,7 +127,34 @@ python3 main.py
 
 ---
 
-## 🛠️ 常見問題與解決方案 (Troubleshooting)
+## � 執行結果範例 (Execution Example)
+
+以下是執行 `main.py` 後的真實終端機輸出，展示了 Agent 如何透過「思考、行動、觀察」循環完成任務：
+
+```text
+🚀 啟動任務: 找出目前台灣總統是誰，並計算他在 2030 年時幾歲。
+
+--- 步驟 1 ---
+🤔 Thought: 用戶想了解台灣現任總統是誰以及計算他到2030年的年齡。我需要先搜尋台灣現任總統的資訊。
+⚡ Action: web_search('台灣現任總統是誰 2024')
+   🔎 [執行搜尋]: 台灣現任總統是誰 2024
+👁️ Observation: 2024年5月20日起，台灣總統為賴清德 (賴清德出生於1959年)。
+
+--- 步驟 2 ---
+🤔 Thought: 已經獲得台灣現任總統的資訊。賴清德出生於1959年，需要計算他在2030年時的年齡。
+⚡ Action: calculator('2030 - 1959')
+   🧮 [執行計算]: 2030 - 1959
+👁️ Observation: 71
+
+--- 步驟 3 ---
+
+✅ 任務完成！
+Final Answer: 台灣現任總統是賴清德，他出生於1959年。到2030年時，他將會是71歲。
+```
+
+---
+
+## �🛠️ 常見問題與解決方案 (Troubleshooting)
 
 ### Q1: 安裝套件時出現 `externally-managed-environment`
 **原因**：Ubuntu 22.04+ 為了保護系統 Python，不允許直接使用 `pip` 安裝套件。

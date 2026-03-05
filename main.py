@@ -16,10 +16,16 @@ load_dotenv()
 
 class MiniMaxReActAgent:
     def __init__(self):
+        # ═══════════════════════════════════════════
+        # 💡 標準用法說明：OpenAI SDK v1.x +
+        # 這裡採用了現代化的 Client 實例化方式，相對於舊版的全局設定更具隔離性。
+        # 由於 MiniMax 支援 OpenAI 兼容協議，我們只需替換 base_url 即可。
+        # ═══════════════════════════════════════════
         self.client = OpenAI(
             api_key=os.getenv("MINIMAX_API_KEY"),
             base_url=os.getenv("MINIMAX_BASE_URL")
         )
+
         self.model = os.getenv("MINIMAX_MODEL", "abab6.5s-chat")
         
         # 定義可用工具

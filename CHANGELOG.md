@@ -16,3 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - 加入 Mermaid 系統流程圖。
     - 加入 WSL 環境下的快速開始指南。
     - 加入常見問題（Troubleshooting）章節，記錄模型命名與虛擬環境等坑點。
+    - 加入實機執行輸出範例，提升對 ReAct 流程的可理解性。
+    - 加入「技術選型：OpenAI SDK 介紹」章節，說明其功能與使用方法。
+- 更新 `main.py`：加入 OpenAI SDK 標準用法的教學註解。
+
+
